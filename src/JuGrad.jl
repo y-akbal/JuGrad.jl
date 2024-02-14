@@ -11,7 +11,7 @@ __precompile__(true)
 using Base:show, +, *, -, /, zero, one
 
 function __init__()
-    @info "Further debugging needed! Use with caution!!!"
+    @info "Further debugging needed!!! Please use with caution!!!"
 end
 
 export t_number, grad, backward!, zero_grad!, tracked_number
@@ -187,14 +187,14 @@ end
 
 module nn
 
-include("nn.jl")
-
 __precompile__(true)
 
-export Linear
+include("nn.jl")
+
+export AbstractLayer, AbstractNeuralNetwork
+
 
 end
-
 
 end
 

@@ -15,7 +15,7 @@ using BenchmarkTools
     L::Array{Function} = [f_1, f_2, f_3, f_4, f_5]
     Shapes::Array{Tuple} = [(2,1), (3,1), (10,10), (2,1), (7,7)]
 
-    function test(L::Array{Function}, Shapes::Array{Tuple} ; q::Int = 100000)::Bool
+    function test_1(L::Array{Function}, Shapes::Array{Tuple} ; q::Int = 100000)::Bool
         m::Int = 0
         for (f, shape) in zip(L, Shapes)
             for _ in 1:q
@@ -25,6 +25,10 @@ using BenchmarkTools
         end
         return m == q*length(L)
     end    
-    @test test(L, Shapes; q = 1000)
+
+
+
+    @test test_1(L, Shapes; q = 1000)
+
 end
 

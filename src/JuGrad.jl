@@ -184,6 +184,18 @@ function grad(f::Function, x::T) where T <: Real
     return z.w, x.grad
 end
 
+
+module nn
+
+include("nn.jl")
+
+__precompile__(true)
+
+export Linear
+
+end
+
+
 end
 
 

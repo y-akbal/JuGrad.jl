@@ -83,21 +83,7 @@ function retrieve_grads(network:: AbstractNeuralNetwork)
 end
 
 
-
-@kwdef mutable struct sequential <: AbstractNeuralNetwork
-    lay1 = Linear(10, 20; σ = JuGrad.sigmoid_)
-    lay2 = Linear(20, 1)
-end
-
-function (seq::sequential)(x)
-    return seq.lay2(seq.lay1(x))
-end
-
-function loss(x,y)
-    return sum((x-y).^2)
-end
-
-
+"""
 X = randn(10, 10)
 y = randn(1, 10)
 series = sequential()
@@ -111,9 +97,8 @@ backward!(loss_)
 get_grads(series)[:lay1][:w]
 
 
-
 """
-series(randn(10,10))
+
 
 """
 lin = Linear(10,1;σ = JuGrad.tanh_)

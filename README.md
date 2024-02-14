@@ -22,11 +22,12 @@ zero_grad!(z)
 
 Here t_number is a special type that whispers the gradient values (or whatever needed) to do backwardpass to its child t_number. At the moment there is NO ""stop gradient"" kinda option. zero_grad! function zeros the grads of all the dudes in the computational graph. At the moment there is no plan to implement things like Hessian so forth. 
 
+## Examples
+See [here](https://github.com/)
+
 
 <p align="center">
 
 <img src="memes.png" width="512" class="center"/>
 
 </p>
-
-# JuGrad.jl

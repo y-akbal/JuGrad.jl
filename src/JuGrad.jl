@@ -177,7 +177,7 @@ function grad(f::Function, x::AbstractVecOrMat{T}) where T <: Real
 end
 
 function grad(f::Function, x::T) where T <: Real
-    x = x |> t_number{Float32}
+    x = x |> t_number
     z = f(x) 
     z.grad = 1
     backward!(z)

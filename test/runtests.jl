@@ -7,6 +7,9 @@ using BenchmarkTools
 
 
 @testset "JuGrad.jl" begin
+
+
+    
     f_1(x) = x[1]^2 + x[2]^2
     f_2(x) = x[1]^2*exp(x[2])^2/x[3]
     f_3(x) = sum(x)
@@ -25,8 +28,9 @@ using BenchmarkTools
         end
         return m == q*length(L)
     end    
-
-
+    #TODO: Add here on optimization, and Euıler's method ODE solver!!!!
+    #TODO: Add here something on Neural Networks!!!
+        
 
     @test test_1(L, Shapes; q = 1000)
 

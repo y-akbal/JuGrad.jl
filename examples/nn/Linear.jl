@@ -1,5 +1,7 @@
 using JuGrad
 
+
+
 @kwdef mutable struct sequential <: AbstractNeuralNetwork
     lay1 = Linear(10, 20; σ = JuGrad.sigmoid_)
     lay2 = Linear(20, 1)

@@ -1,6 +1,6 @@
 # JuGrad.jl
 
-This is a experimental reverse mode autograd stuff designed for educational purposses. Eventhough it works well, no promise to be fast and furious! It is in Pytorch's style: uses backward! and zero_grad! functions.
+This is an experimental reverse mode autograd stuff designed for educational purposses. Eventhough it works well, no promise to be fast and furious! It is in Pytorch's style: uses backward! and zero_grad! functions.
 It does take scalar based gradients, therefore can be used to implement simple optimization algorithms. 
 
 ````julia

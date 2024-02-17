@@ -10,7 +10,7 @@ function Linear(d_in::Int, d_out::Int; σ = JuGrad.ID)
     return Linear(randn(d_out, d_in) .|> JuGrad.t_number, randn(d_out,1) .|> JuGrad.t_number, σ)
 end
 
-Base.show(io::IO, t::AbstractLayer) = print(io, "Layer with $(get_num_params(t)) parameters, and activation $(t.f)")
+Base.show(io::IO, t::AbstractLayer) = print(io, "Layer with $(get_num_params(t)) parameters, and $((t.f).def) activation")
 Base.show(io::IO, t::AbstractNeuralNetwork) = print(io, "Network with $(get_num_params(t)) parameters!!!")
 
 

@@ -1,5 +1,3 @@
-
-
 abstract type AbstractLayer end
 abstract type AbstractNeuralNetwork end
 

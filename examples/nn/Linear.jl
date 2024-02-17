@@ -23,8 +23,9 @@ begin
     network = sequential()
     X = randn(10, 200) 
     y = randn(1, 200)
-end
 
+end
+JuGrad.nn.retrieve_grads(network)
 
 loss_ = loss(network(X),y) ## Calculate the loss!!!
 loss_.grad = 1 ## This is kinda must, we can eliminate; though the code would be pretty ugly and hard to read!!!

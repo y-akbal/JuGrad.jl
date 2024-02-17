@@ -57,7 +57,7 @@ end
 
 
 ### Examples Now
-function retrieve_grads(network:: AbstractNeuralNetwork)
+function retrieve_grads(network::AbstractNeuralNetwork)
     states = Dict{Symbol, Any}()
     for lay in propertynames(network)
         field = getfield(network, lay)

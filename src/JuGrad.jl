@@ -8,7 +8,7 @@ module JuGrad
 
 __precompile__(true)
 
-using Base:show, +, *, -, /, zero, one
+using Base:show, +, *, -, /, zero, one, abs
 
 function __init__()
     @info "Further debugging needed!!! Please use with caution!!!"
@@ -125,6 +125,12 @@ end
 function Base.:exp(t::t_number)::t_number
     result = t_number(exp(t.w))
     result.parents_grads[t] = exp(t.w)
+    return result
+end
+
+function Base.:abs(t::t_number)::t_number
+    result = t_number(abs(t.w))
+    result.parents_grads[t] = ifelse(t.w>=0, 1, -1)
     return result
 end
 

@@ -1,4 +1,4 @@
-using .JuGrad:grad
+using JuGrad
 using Zygote
 using LinearAlgebra
 using Random

@@ -52,6 +52,10 @@ function retrieve_grads(layer::AbstractLayer)
     return states
 end
 
+#TODO "Zero Grad function for layers"
+#TODO "step function for layers"
+
+
 ### Examples Now
 function retrieve_grads(network:: AbstractNeuralNetwork)
     states = Dict{Symbol, Any}()

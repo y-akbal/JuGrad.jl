@@ -1,4 +1,4 @@
-using .JuGrad:grad
+using JuGrad
 using Zygote
 using LinearAlgebra
 using Random
@@ -36,7 +36,7 @@ end
 begin
     Random.seed!(0)
     x_init = rand(2) .|> Float32
-    optimize(x->f(x), x_init; lr = 0.001f0, max_iter = 10000)
+    optimize(x->f(x), x_init; lr = 0.001f0, max_iter = 10000, stop_criterion = 1e-3) 
 end
 
 

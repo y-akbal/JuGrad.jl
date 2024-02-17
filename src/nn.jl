@@ -18,7 +18,7 @@ function get_num_params(layer::AbstractLayer)
 end
 
 
-function get_num_params(network::AbstractNeuralNetwork)
+function get_num_params(network::T) where T <: AbstractNeuralNetwork
     counter::Int64 = 0
     for layer in propertynames(network)
         field = getfield(network, layer)
@@ -52,17 +52,18 @@ function retrieve_grads(layer::AbstractLayer)
     return states
 end
 
+
 #TODO "Zero Grad function for layers"
 #TODO "step function for layers"
 
 
 ### Examples Now
-function retrieve_grads(network::AbstractNeuralNetwork)
+function retrieve_grads(network)
     states = Dict{Symbol, Any}()
     for lay in propertynames(network)
         field = getfield(network, lay)
         if isa(field, AbstractLayer)
-            states[lay] = get_grads(field)
+            states[lay] = get_weights(field)
         end
     end
     return states

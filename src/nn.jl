@@ -41,7 +41,7 @@ function get_weights(layer::AbstractLayer)
     return states
 end
 
-function retrieve_grads(layer::AbstractLayer)
+function get_grads(layer::AbstractLayer)
     states = Dict{Symbol, AbstractVecOrMat}()
     for lay in propertynames(layer)
         field = getfield(layer, lay)
@@ -58,16 +58,15 @@ end
 
 
 ### Examples Now
-function retrieve_grads(network)
+function get_grads(network)
     states = Dict{Symbol, Any}()
     for lay in propertynames(network)
         field = getfield(network, lay)
         if isa(field, AbstractLayer)
-            states[lay] = get_weights(field)
+            states[lay] = get_grads(field)
         end
     end
     return states
 end
-
 
 

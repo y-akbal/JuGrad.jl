@@ -1,15 +1,16 @@
 using JuGrad
 using JuGrad.nn:Linear
 using Random
+using IterTools
 
-
-@kwdef mutable struct sequential_ <: JuGrad.nn.AbstractNeuralNetwork
+@kwdef mutable struct sequential <: JuGrad.nn.AbstractNeuralNetwork
     lay1 = Linear(10, 20; σ = JuGrad.tanh_)
-    lay2 = Linear(20, 1)
+    lay2 = Linear(20, 20; σ = JuGrad.tanh_)
+    lay3 = Linear(20, 1)
 end
 
 function (seq::sequential)(x)
-    return seq.lay2(seq.lay1(x))
+    return seq.lay3(seq.lay2(seq.lay1(x)))
 end
 
 function loss(x,y)
@@ -26,11 +27,10 @@ begin
     y = randn(1, 200)
 end
 
-
+"""
 loss_ = loss(network(X),y) ## Calculate the loss!!!
 loss_.grad = 1 ## This is kinda must, we can eliminate; though the code would be pretty ugly and hard to read!!!
 backward!(loss_) ## We accumulated the gradients in a backwards manner now!!!
+"""
 
-JuGrad.nn.retrieve_grads(network)
 
-network.lay1.b -= network.lay1.b.|> x->x.grad  ## As soon as I can I will write get grads function!!!!

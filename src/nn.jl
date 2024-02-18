@@ -41,12 +41,16 @@ function get_weights(layer::AbstractLayer)
     return states
 end
 
+function get_grads(a::AbstractVecOrMat)
+    return map(x->x.grad, a)
+end
+
 function get_grads(layer::AbstractLayer)
     states = Dict{Symbol, AbstractVecOrMat}()
     for lay in propertynames(layer)
         field = getfield(layer, lay)
         if isa(field, AbstractVecOrMat)
-            states[lay] = field .|> x->x.grad
+            states[lay] = get_grads(field)
         end
     end
     return states

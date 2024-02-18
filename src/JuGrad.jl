@@ -37,38 +37,38 @@ include("diff_functions.jl")
 Base.show(io::IO, t::T) where T<: tracked_number = print(io, t.w)
 ## Basic arithmetic operations are defined here
 
-function Base.:+(t::t_number, l::t_number)::t_number
+@inline function Base.:+(t::t_number, l::t_number)::t_number
     result = t_number(t.w+l.w)
     result.parents_grads[t] = one(t.w)
     result.parents_grads[l] = one(l.w)
     return result
 end
 
-function Base.:-(t::t_number, l::t_number)::t_number
+@inline function Base.:-(t::t_number, l::t_number)::t_number
     result = t_number(t.w-l.w)
     result.parents_grads[t] = one(t.w)
     result.parents_grads[l] = -one(l.w)
     return result
 end
 
-function Base.:+(t::t_number, l::T)::t_number where T <: Real
+@inline function Base.:+(t::t_number, l::T)::t_number where T <: Real
     result = t_number(t.w+l)
     result.parents_grads[t] = one(t.w)
     return result
 end
 
-function Base.:+(l::T, t::t_number)::t_number where T <: Real
+@inline function Base.:+(l::T, t::t_number)::t_number where T <: Real
     return t+l
 end
 
 
-function Base.:-(t::t_number, l::T)::t_number where T <: Real
+@inline function Base.:-(t::t_number, l::T)::t_number where T <: Real
     result = t_number(t.w-l)
     result.parents_grads[t] = one(t.w)
     return result
 end
 
-function Base.:-(l::T, t::t_number)::t_number where T <: Real
+@inline function Base.:-(l::T, t::t_number)::t_number where T <: Real
     result = t_number(l-t.w)
     result.parents_grads[t] = -one(t.w)
     return result
@@ -76,79 +76,79 @@ end
 
 
 
-function Base.:*(t::t_number, l::t_number)::t_number
+@inline function Base.:*(t::t_number, l::t_number)::t_number
     result = t_number(t.w*l.w)
     result.parents_grads[t] = l.w
     result.parents_grads[l] = t.w
     return result
 end
 
-function Base.:/(t::t_number, l::t_number)::t_number
+@inline function Base.:/(t::t_number, l::t_number)::t_number
     result = t_number(t.w/l.w)
     result.parents_grads[t] = 1/l.w
     result.parents_grads[l] = -t.w/(l.w)^2
     return result
 end
 
-function Base.:/(t::t_number, l::T)::t_number where T <: Real
+@inline function Base.:/(t::t_number, l::T)::t_number where T <: Real
     result = t_number(t.w/l)
     result.parents_grads[t] = 1/l
     return result
 end
 
 
-function Base.:/(l::T, t::t_number)::t_number where T <: Real
+@inline function Base.:/(l::T, t::t_number)::t_number where T <: Real
     result = t_number(l/t.w)
     result.parents_grads[t] = -1/(t.w)^2
     return result
 end
 
 
-function Base.:*(t::t_number, c::T)::t_number where T<:Real
+@inline function Base.:*(t::t_number, c::T)::t_number where T<:Real
     result = t_number(c*t.w)
     result.parents_grads[t] = c*one(t.w)
     return result
 end
 
-function Base.:*(c::T, t::t_number)::t_number where T<:Real
+@inline function Base.:*(c::T, t::t_number)::t_number where T<:Real
     result = t_number(c*t.w)
     result.parents_grads[t] = c*one(t.w)
     return result
 end
 
-function Base.:-(t::t_number)::t_number 
+@inline function Base.:-(t::t_number)::t_number 
     result = t_number(-t.w)
     result.parents_grads[t] = -one(t.w)
     return result
 end
 
-function Base.:exp(t::t_number)::t_number
+@inline function Base.:exp(t::t_number)::t_number
     result = t_number(exp(t.w))
     result.parents_grads[t] = exp(t.w)
     return result
 end
 
-function Base.:abs(t::t_number)::t_number
+@inline function Base.:abs(t::t_number)::t_number
     result = t_number(abs(t.w))
     result.parents_grads[t] = ifelse(t.w>=0, 1, -1)
     return result
 end
 
 
-function Base.:sin(t::t_number)::t_number
+@inline function Base.:sin(t::t_number)::t_number
     result = t_number(sin(t.w))
     result.parents_grads[t] = cos(t.w)
     return result
 end
 
 
-function Base.:cos(t::t_number)::t_number
+@inline function Base.:cos(t::t_number)::t_number
     result = t_number(cos(t.w))
     result.parents_grads[t] = -sin(t.w)
     return result
 end
 
-function Base.:^(t::t_number, i::T)::t_number where T <: Real
+@inline function Base.:^(t::t_number, i::T)::t_number where T <: Real
     if i != 0
         result = t_number((t.w)^i)
         result.parents_grads[t] = i*(t.w)^(i-1)
@@ -159,16 +159,16 @@ function Base.:^(t::t_number, i::T)::t_number where T <: Real
     return result
 end
 
-function zero_grad!(t::t_number)
+@inline function zero_grad!(t::t_number)
     t.grad = zero(t.grad)
     for parents in t.parents_grads |> keys
         zero_grad!(parents)
     end
 end
 
-function backward!(l::t_number)
+@inline function backward!(l::t_number)
     for parents in l.parents_grads |> keys
-        parents.grad += l.parents_grads[parents]*l.grad
+        @fastmath parents.grad += l.parents_grads[parents]*l.grad
         ## Recursive call 
         backward!(parents)
     end 

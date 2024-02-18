@@ -10,18 +10,19 @@ mutable struct Descent <: AbstractOptimiser
 end
 
 
+opt = Descent(0.1)
+
 
 function step!(opt::AbstractOptimiser, layer::JuGrad.nn.AbstractNeuralNetwork)
     for lay in propertynames(layer)
         field = getfield(layer, lay)
         if isa(field, JuGrad.nn.AbstractLayer)
+            ## Do you magic here!!!
             step!(opt, field)
         end
     end
 end
 
-
-opt = Descent(0.1)
 
 
 function step!(opt::Descent, layer::JuGrad.nn.AbstractLayer)
@@ -34,7 +35,15 @@ function step!(opt::Descent, layer::JuGrad.nn.AbstractLayer)
     end
 end
 
-step!(opt, network)
+@inline function step!(a::AbstractVecOrMat{T}, ∇::AbstractVecOrMat{T}) where T <: tracked_number
+    for (i, (a_x, g_x)) in enumerate(zip(a,∇))
+            a[i].w += g_x
+    end
+end
+
+
+
+#step!(opt, network)
 
 
 

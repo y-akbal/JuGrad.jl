@@ -1,6 +1,6 @@
 # JuGrad.jl
 
-This is an experimental reverse mode autograd stuff designed for educational purposses. Eventhough it works well, no promise to be fast and furious! It is in Pytorch's style: uses backward! and zero_grad! functions.
+This is an experimental reverse mode autograd stuff designed for educational purposses, motivated by Karpathy's Tiny Grad. Eventhough it works well, no promise to be fast and furious! It is in Pytorch's style: uses backward! and zero_grad! functions.
 It does take scalar based gradients, therefore can be used to implement simple optimization algorithms. 
 
 ````julia
@@ -29,6 +29,15 @@ Here t_number is a special type that whispers the gradient values (or whatever n
 using JuGrad
 using JuGrad.nn:Linear
 layer = Linear(10, 1;σ = JuGrad.tanh_)
+
+X = randn(10, 100)
+y = randn(1, 100)
+
+loss = sum((layer(X) - y).^2)
+loss.grad = 1
+bacward!(loss) #You can now collect the gradients
+
+
 ````
 
 

@@ -56,11 +56,6 @@ function get_grads(layer::AbstractLayer)
     return states
 end
 
-
-#TODO "Zero Grad function for layers"
-#TODO "step function for layers"
-
-
 ### Examples Now
 function get_grads(network)
     states = Dict{Symbol, Any}()

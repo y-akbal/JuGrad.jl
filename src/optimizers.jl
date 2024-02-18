@@ -10,7 +10,6 @@ mutable struct Descent <: AbstractOptimiser
 end
 
 
-opt = Descent(0.1)
 
 function step!(opt::AbstractOptimiser, layer::JuGrad.nn.AbstractNeuralNetwork)
     for lay in propertynames(layer)
@@ -22,14 +21,20 @@ function step!(opt::AbstractOptimiser, layer::JuGrad.nn.AbstractNeuralNetwork)
 end
 
 
+opt = Descent(0.1)
+
+
 function step!(opt::Descent, layer::JuGrad.nn.AbstractLayer)
     for lay in propertynames(layer)
         field = getfield(layer, lay)
         if isa(field, AbstractVecOrMat)
-            println(field)
+            ## We need to take step here!!!!
+            println(field .|> x->x.w )
         end
     end
 end
+
+step!(opt, network)
 
 
 

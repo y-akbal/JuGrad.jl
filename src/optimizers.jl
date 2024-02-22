@@ -22,7 +22,7 @@ end
 
 
 
-function step!(opt::Descent, layer::JuGrad.nn.AbstractLayer)
+@inline function step!(opt::Descent, layer::JuGrad.nn.AbstractLayer)
     for lay in propertynames(layer)
         field = getfield(layer, lay)
         if isa(field, AbstractVecOrMat)
@@ -33,7 +33,7 @@ function step!(opt::Descent, layer::JuGrad.nn.AbstractLayer)
 end
 
 @inline function step!(opt::Descent, a::AbstractVecOrMat{T}, ∇::AbstractVecOrMat) where T <: tracked_number
-    for i in eachindex(a)
+    for i in eachindex(a, ∇)
             a[i].w += -opt.η*∇[i]
     end
 end

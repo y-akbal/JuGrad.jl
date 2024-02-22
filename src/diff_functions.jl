@@ -29,7 +29,7 @@ end
 ## Use here  @inline and @fastmath kind a stuff
 relu_ = diff_f(x->max(x,0), x-> ifelse(x>0, one(x), zero(x)),"Relu")
 leakyrelu_ = diff_f(x->max(x,-0.1*x), x-> ifelse(x>0, one(x), -0.1*one(x)),"LeakyRelu")
-sigmoid_ = diff_f(x->1/(1+exp(-x)), x -> exp(x)/(1+exp(x))^2, "Sigmoid")
+sigmoid_ = diff_f(x->1/(1+exp(-x)), x -> exp(-x)/(1+exp(-x))^2, "Sigmoid")
 tanh_ = diff_f(x->(exp(x) - exp(-x))/(exp(x) + exp(-x)), x -> one(x)-((exp(x) - exp(-x))/(exp(x) + exp(-x)))^2, "TanH")
 kelu_ = diff_f(x->ifelse(x > 0, x*(1-exp(-x)/2), x*exp(x)/2), x-> ifelse(x > 0, (1-exp(-x)/2)*(1-x*exp(-x)/2), (x+1)*exp(x)/2), "Kelu")
 log_ = diff_f(x->log(x), x->1/x, "Log_")

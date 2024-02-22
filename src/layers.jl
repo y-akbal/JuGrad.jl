@@ -8,7 +8,7 @@ end
 
 function Linear(d_in::Int, d_out::Int; σ = JuGrad.ID)
     ## At the moment Float64 is fixed, later we shall change this!!!
-    return Linear(randn(d_out, d_in)/(d_in^0.5) .|> JuGrad.t_number, randn(d_out,1)/(d_out^0.5) .|> JuGrad.t_number, σ)
+    return Linear(randn(d_out, d_in)/(d_out) .|> JuGrad.t_number, randn(d_out,1)/(d_out) .|> JuGrad.t_number, σ)
 end
 
 Base.show(io::IO, t::AbstractLayer) = print(io, "Linear layer with $(get_num_params(t)) parameters, and $((t.f).def) activation!!!")

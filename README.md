@@ -38,7 +38,7 @@ loss.grad = 1
 bacward!(loss) #You can now collect the gradients
 
 ````
-See the examples for an end to end application, to do so you need PyCall with sklearn installed. 
+See the examples for an end to end application. To do so, you will need PyCall with sklearn installed. 
 
 
 <p align="center">

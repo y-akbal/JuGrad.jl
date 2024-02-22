@@ -41,8 +41,3 @@ bacward!(loss) #You can now collect the gradients
 See the examples for an end to end application. To do so, you will need PyCall with sklearn installed. 
 
 
-<p align="center">
-
-<img src="memes.png" width="256" class="center"/>
-
-</p>

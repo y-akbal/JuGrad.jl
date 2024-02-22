@@ -43,6 +43,6 @@ See the examples for an end to end application. To do so, you will need PyCall w
 
 <p align="center">
 
-<img src="memes.png" width="512" class="center"/>
+<img src="memes.png" width="256" class="center"/>
 
 </p>

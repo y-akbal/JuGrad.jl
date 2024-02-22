@@ -5,6 +5,7 @@ using Random
 using BenchmarkTools
 using Flux
 
+
 @testset "JuGrad.jl" begin
 
     function test_1(q::Int = 100000)::Bool
@@ -27,9 +28,23 @@ using Flux
         return m == q*length(L)
     end    
 
+    function test_2(;size = 100)
+        activation_funcs = [JuGrad.tanh_, JuGrad.relu_, JuGrad.sigmoid_, JuGrad.leakyrelu_]
+        q::Int = 0
+        target::Int = length(activation_funcs)*size
+        for func in activation_funcs
+            for t in 10*randn(size)
+                j_grad = JuGrad.grad(x->func(x), t)
+                z_grad = Zygote.gradient(x->func.f_(x),t)
+                q += isapprox(j_grad[2], z_grad[1]; atol = 1e-4)
+            end
+        end
+    return q == target
+    end
 
     #TODO: Add here something on Neural Networks!!!
     #TODO: Forward functions and gradients of some loss functions
     @test test_1()
+    @test test_2()
 end
 

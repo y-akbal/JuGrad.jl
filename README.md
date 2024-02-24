@@ -38,7 +38,7 @@ loss.grad = 1
 bacward!(loss) #You can now collect the gradients
 
 ````
-See the examples for an end to end applicaion. To do so, you will need PyCall with sklearn installed. Below you will see decision boundaries of two binary  classifiers trained entirely using JuGrad.
+Below you will see decision boundaries of two binary  classifiers trained entirely using JuGrad. See the examples for an end to end applicaion. To do so, you will need PyCall with sklearn installed. 
 
 
 <p align="center">

@@ -130,7 +130,7 @@ end
 
 @inline function Base.:abs(t::t_number)::t_number
     result = t_number(abs(t.w))
-    result.parents_grads[t] = ifelse(t.w>=0, 1, -1)
+    result.parents_grads[t] = ifelse(t.w >= 0, 1, -1)
     return result
 end
 

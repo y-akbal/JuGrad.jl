@@ -8,14 +8,13 @@ using Plots
 @pyimport numpy as np
 
 function return_dataset(n_samples = 100; seed = 0)
-    X_train, y_train = dataset.make_circles(n_samples=n_samples, random_state = seed)
-    X_test, y_test = dataset.make_circles(n_samples=n_samples, random_state = seed+1)
+    X_train, y_train = dataset.make_moons(n_samples=n_samples, random_state = seed)
+    X_test, y_test = dataset.make_moons(n_samples=n_samples, random_state = seed+1)
     X_train, X_test = map(x->x+0.02*randn(x|>size), [X_train, X_test])
     return map(x->np.transpose(x), [X_train, y_train, X_test, y_test])
 end
 
-
-
+dataset.make_circles
 @kwdef mutable struct sequential_binary <: JuGrad.nn.AbstractNeuralNetwork
     lay1 = Linear(2, 10; σ = JuGrad.tanh_)
     lay2 = Linear(10, 1)
@@ -65,8 +64,8 @@ function sketch_decision_boundary(network, X_test, y_test)
     x = -2.0:0.01:2.34
     y = -1.34:0.01:1.34
     f(x,y) = network(reshape([x y], (2,1)))[1,1] |> x-> x.w
-    z_ = @. f(x',y) .|>  x-> ifelse(x>0, 1, -1) 
-    contour(x,y,z_, fill = true, color=:turbo, title="NN decision boundary!!!", xlabel="x", ylabel="y", cbar = false)
+    z_ = @. f(x',y) .|>  JuGrad.sigmoid_
+    contour(x,y,z_, fill = true, color=:turbo, title="NN decision boundary!!!", xlabel="x", ylabel="y", cbar = true)
     x_test = X_test |> transpose
     scatter!(x_test[y_test .== 0, 1],x_test[y_test .== 0, 2], label = "Class-0")
     scatter!(x_test[y_test .== 1, 1],x_test[y_test .== 1, 2], label = "Class-1")

@@ -1,6 +1,6 @@
 # JuGrad.jl
 
-This is an experimental reverse mode autograd stuff designed for educational purposses, motivated by Karpathy's Tiny Grad. Eventhough it works well, no promise to be fast and furious! It is in Pytorch's style: uses backward! and zero_grad! functions.
+This is an experimental reverse mode autograd stuff motivated by Karpathy's Tiny Grad and is designed for fun. JuGrad is written entirely in Julia. Eventhough it works well, no promise to be fast and furious! It is in Pytorch's style: uses backward! and zero_grad! functions.
 It does take scalar based gradients, therefore can be used to implement simple optimization algorithms. 
 
 ````julia

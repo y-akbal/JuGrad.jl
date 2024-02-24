@@ -1,10 +1,7 @@
 using JuGrad
 using JuGrad.nn:Linear
 using Random
-using PyCall
-@pyimport sklearn.datasets as dt
 
-X = dt.load_diabetes()["data"]
 
 
 

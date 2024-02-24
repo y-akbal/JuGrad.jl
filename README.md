@@ -28,7 +28,7 @@ Here t_number is a special type that whispers the gradient values (or whatever n
 ````julia
 using JuGrad
 using JuGrad.nn:Linear
-layer = Linear(10, 1;σ = JuGrad.tanh_)
+layer = Linear(10, 1; σ = JuGrad.tanh_)
 
 X = randn(10, 100)
 y = randn(1, 100)

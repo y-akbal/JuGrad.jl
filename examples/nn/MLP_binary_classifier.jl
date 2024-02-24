@@ -7,8 +7,6 @@ using PyCall
 @pyimport sklearn.datasets as dataset
 @pyimport numpy as np
 
-
-
 function return_dataset(n_samples = 100; seed = 0)
     X_train, y_train = dataset.make_circles(n_samples=n_samples, random_state = seed)
     X_test, y_test = dataset.make_circles(n_samples=n_samples, random_state = seed+1)
@@ -50,10 +48,11 @@ function main()
 
         loss_.grad = 1 ## This is kinda must, we can eliminate; though the code would be pretty ugly and hard to read!!!
         backward!(loss_) ## We accumulated the gradients in a backwards manner now!!!
-        JuGrad.nn.step!(optimizer, network)
+        JuGrad.nn.step!(optimizer, network) ## Take one step towards peace!!!
 
         acc = (1*(map(x->Float64(x.w), network(X_test)) .> 0) .== y_test |> transpose .|> Int64) |> mean
-        zero_grad!(loss_)
+        
+        zero_grad!(loss_) ## Need to zero the gradients here
 
     end
 

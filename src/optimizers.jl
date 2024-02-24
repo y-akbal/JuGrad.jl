@@ -34,7 +34,7 @@ end
 
 @inline function step!(opt::Descent, a::AbstractVecOrMat{T}, ∇::AbstractVecOrMat) where T <: tracked_number
     for i in eachindex(a, ∇)
-            a[i].w += -opt.η*∇[i]
+            @inbounds a[i].w += -opt.η*∇[i]
     end
 end
 

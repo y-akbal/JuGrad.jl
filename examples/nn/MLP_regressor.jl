@@ -4,11 +4,9 @@ using Random
 
 
 
-
-
 @kwdef mutable struct sequential <: JuGrad.nn.AbstractNeuralNetwork
-    lay1 = Linear(10, 20; σ = JuGrad.kelu_)
-    lay2 = Linear(20, 20; σ = JuGrad.kelu_)
+    lay1 = Linear(10, 20; σ = JuGrad.relu_)
+    lay2 = Linear(20, 20; σ = JuGrad.relu_)
     lay3 = Linear(20, 1)
 end
 
@@ -20,7 +18,7 @@ end
 
 function loss(x,y)
     L, B = x |> size
-    return sum((x-y).^2)/B
+    return sum((x.-y).^2)/(L*B)
 end
 
 
@@ -28,12 +26,13 @@ begin
     ## Fake dataset
     Random.seed!(0)
     network = sequential()
-    X = randn(10, 200) 
-    y = randn(1, 200)
+    X = randn(10, 20) 
+    y = randn(1, 20)
 end
+sum((network(X) - y).^2)
 
 
-optimizer = JuGrad.nn.Descent(0.0000001)
+optimizer = JuGrad.nn.Descent(0.000000001)
 
 
 for i in 1:1000

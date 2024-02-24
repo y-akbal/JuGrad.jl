@@ -3,7 +3,6 @@ using Test
 using Zygote
 using Random
 using BenchmarkTools
-using Flux
 
 
 @testset "JuGrad.jl" begin

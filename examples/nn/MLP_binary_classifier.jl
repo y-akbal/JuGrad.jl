@@ -72,6 +72,7 @@ function sketch_decision_boundary(network, X_test, y_test)
     png("Decision_boundary")
 end
 
+
 if abspath(PROGRAM_FILE) == @__FILE__
     network, X_test, y_test = main()
     sketch_decision_boundary(network, X_test, y_test)

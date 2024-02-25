@@ -11,7 +11,7 @@ end
 
 
 function step!(opt::AbstractOptimiser, layer::JuGrad.nn.AbstractNeuralNetwork)
-    for lay in propertynames(layer)
+    Threads.@threads for lay in propertynames(layer)
         field = getfield(layer, lay)
         if isa(field, JuGrad.nn.AbstractLayer)
             ## Do you magic here!!!

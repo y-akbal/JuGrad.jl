@@ -49,3 +49,11 @@ Below you will see some decision boundaries of two binary  classifiers trained e
 
 <img src="examples/nn/Decision_boundary_moons.png" width="384" class="right"/>
 </p>
+
+There is a class of functions (actually callable objects) with a generic name diff_f. These guys are actually callable structs with gradient information contained already in. 
+## Examples: diff_f
+````julia
+using JuGrad
+relu_ = diff_f(x->max(x,0), x-> ifelse(x>0, one(x), zero(x)),"Relu")
+````
+This way you can implement your own activation functions without bothering yourself "not implemented errors". Here the second function stand for the derivative of the first, responsible for doing backprop. 

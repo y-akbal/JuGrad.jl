@@ -1,5 +1,5 @@
 
-mutable struct diff_f <: Function
+struct diff_f <: Function
     f_::Function
     grad::Function
     def::String

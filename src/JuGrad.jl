@@ -11,7 +11,7 @@ __precompile__(true)
 using Base:show, +, *, -, /, zero, one, abs
 
 function __init__()
-    @info "Further debugging needed!!! Please use with caution!!!"
+    @warn "Further debugging needed!!! Please use with caution!!!"
 end
 
 export t_number, grad, backward!, zero_grad!, tracked_number
@@ -161,6 +161,7 @@ end
 
 @inline function zero_grad!(t::t_number)
     t.grad = zero(t.grad)
+    ## Something that has been alread zeroes may be zeroed one more time!!!
     for parents in t.parents_grads |> keys
         zero_grad!(parents)
     end

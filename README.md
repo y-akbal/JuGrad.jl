@@ -56,6 +56,6 @@ There is a class of functions (actually callable objects) with a generic name di
 using JuGrad
 relu_ = diff_f(x->max(x,0), x-> ifelse(x>0, one(x), zero(x)),"Relu")
 ````
-This way you can implement your own activation functions without bothering yourself "not implemented errors". Here the second function stand for the derivative of the first, responsible for doing backprop. 
+This way you can implement your own activation functions without bothering yourself with "not implemented errors". Here the second function stand for the derivative of the first, responsible for doing backprop. 
 
 Note: To run the unit tests, you will need Zygote installed on your machine.

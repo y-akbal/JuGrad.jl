@@ -21,21 +21,16 @@ mutable struct t_number{T} <: tracked_number where T <: Real
     w::T
     grad::T
     parents_grads::Dict{tracked_number, T}
+    terminal::Bool
 end
 
 
-Base.:zero(x::t_number) = zero(x.w)
-Base.:one(x::t_number) = one(x.w)
 
-##Constructor dude...
-function t_number(w::T) where T <: Real
-    return t_number(w, zero(w), Dict{tracked_number, T}())
-end
-
-include("diff_functions.jl")
-
-Base.show(io::IO, t::T) where T<: tracked_number = print(io, t.w)
 ## Basic arithmetic operations are defined here
+function to_nonterminal!(t::t_number)
+    ## We use this dude to convert the output to non_terminal state
+    t.terminal = true
+end
 
 @inline function Base.:+(t::t_number, l::t_number)::t_number
     result = t_number(t.w+l.w)
@@ -58,6 +53,7 @@ end
 end
 
 @inline function Base.:+(l::T, t::t_number)::t_number where T <: Real
+    ## We use here t_number + l 
     return t+l
 end
 
@@ -84,22 +80,22 @@ end
 end
 
 @inline function Base.:/(t::t_number, l::t_number)::t_number
-    result = t_number(t.w/l.w)
-    result.parents_grads[t] = 1/l.w
-    result.parents_grads[l] = -t.w/(l.w)^2
+    result = t_number(t.w*inv(l.w))
+    result.parents_grads[t] = inv(l.w)
+    result.parents_grads[l] = -t.w*inv(l.w)^2
     return result
 end
 
 @inline function Base.:/(t::t_number, l::T)::t_number where T <: Real
-    result = t_number(t.w/l)
-    result.parents_grads[t] = 1/l
+    result = t_number(t.w*inv(l))
+    result.parents_grads[t] = inv(l)
     return result
 end
 
 
 @inline function Base.:/(l::T, t::t_number)::t_number where T <: Real
-    result = t_number(l/t.w)
-    result.parents_grads[t] = -1/(t.w)^2
+    result = t_number(l*inv(t.w))
+    result.parents_grads[t] = -inv(t.w)^2
     return result
 end
 
@@ -159,6 +155,20 @@ end
     return result
 end
 
+
+
+Base.:zero(x::t_number) = zero(x.w)
+Base.:one(x::t_number) = one(x.w)
+
+
+
+##Constructor dude...
+function t_number(w::T) where T <: Real
+    return t_number(w, zero(w), Dict{tracked_number, T}(), false)
+end
+
+Base.show(io::IO, t::T) where T<: tracked_number = print(io, t.w)
+
 @inline function zero_grad!(t::t_number)
     t.grad = zero(t.grad)
     ## Something that has been alread zeroes may be zeroed one more time!!!
@@ -176,21 +186,22 @@ end
 end
 
 function grad(f::Function, x::AbstractVecOrMat{T}) where T <: Real
-    x = x .|> t_number
-    z = f(x) 
+    x_ = x .|> t_number
+    z = f(x_) 
     z.grad = 1
     backward!(z)
-    return z.w, map(x->x.grad, x)
+    return z.w, map(x->x.grad, x_)
 end
 
 function grad(f::Function, x::T) where T <: Real
-    x = x |> t_number
-    z = f(x) 
+    x_ = x |> t_number
+    z = f(x_) 
     z.grad = 1
     backward!(z)
-    return z.w, x.grad
+    return z.w, x_.grad
 end
 
+include("diff_functions.jl")
 
 module nn
 
@@ -200,9 +211,7 @@ include("nn.jl")
 
 export AbstractLayer, AbstractNeuralNetwork
 
-
 end
-
 end
 
 

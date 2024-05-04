@@ -35,7 +35,7 @@ end
 
 begin
     Random.seed!(0)
-    x_init = rand(2) .|> Float32
+    x_init = rand(Float32, 2)
     optimize(x->f(x), x_init; lr = 0.001f0, max_iter = 10000, stop_criterion = 1e-3 |> Float32) 
 end
 

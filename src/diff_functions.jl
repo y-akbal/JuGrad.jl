@@ -7,7 +7,7 @@ end
 
 function (f::diff_f)(x::T) where T 
     ## This dude is the forward pass function!!!
-    return f.f_(x)
+    return @fastmath f.f_(x)
 end
 
 function grad(f::diff_f, x::T)  where T <: Real
@@ -20,7 +20,7 @@ end
 
 function (f::diff_f)(x::T) where T <: tracked_number
     ## This is for backwards pass
-    res = t_number(f.f_(x.w))
+    res = t_number(@fastmath f.f_(x.w))
     res.parents_grads[x] = grad(f, x)
     return res
 end

@@ -24,13 +24,16 @@ mutable struct t_number{T} <: tracked_number where T <: Real
     terminal::Bool
 end
 
+##Constructor dude...
+function t_number(w::T) where T <: Real
+    return t_number(w, zero(w), Dict{tracked_number, T}(), false)
+end
 
+Base.show(io::IO, t::T) where T<: tracked_number = print(io, t.w)
 
 ## Basic arithmetic operations are defined here
-function to_nonterminal!(t::t_number)
-    ## We use this dude to convert the output to non_terminal state
-    t.terminal = true
-end
+Base.:zero(x::t_number) = zero(x.w)
+Base.:one(x::t_number) = one(x.w)
 
 @inline function Base.:+(t::t_number, l::t_number)::t_number
     result = t_number(t.w+l.w)
@@ -95,7 +98,7 @@ end
 
 @inline function Base.:/(l::T, t::t_number)::t_number where T <: Real
     result = t_number(l*inv(t.w))
-    result.parents_grads[t] = -inv(t.w)^2
+    result.parents_grads[t] = -l*inv(t.w)^2
     return result
 end
 
@@ -157,18 +160,6 @@ end
 
 
 
-Base.:zero(x::t_number) = zero(x.w)
-Base.:one(x::t_number) = one(x.w)
-
-
-
-##Constructor dude...
-function t_number(w::T) where T <: Real
-    return t_number(w, zero(w), Dict{tracked_number, T}(), false)
-end
-
-Base.show(io::IO, t::T) where T<: tracked_number = print(io, t.w)
-
 @inline function zero_grad!(t::t_number)
     t.grad = zero(t.grad)
     ## Something that has been alread zeroes may be zeroed one more time!!!
@@ -204,7 +195,6 @@ end
 include("diff_functions.jl")
 
 module nn
-
 __precompile__(true)
 
 include("nn.jl")

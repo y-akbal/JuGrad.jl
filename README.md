@@ -16,7 +16,6 @@ using JuGrad
 x = t_number(3.f0)
 y = t_number(5.f0)
 z = sin(x^2 + y^2)
-z.grad = 1
 backward!(z)
 x.grad, y.grad
 zero_grad!(z)
@@ -35,7 +34,6 @@ X = randn(10, 100)
 y = randn(1, 100)
 
 loss = sum((layer(X) - y).^2)
-loss.grad = 1
 bacward!(loss) #You can now collect the gradients
 JuGrad.nn.step!(optimizer, network) #Update the grads now!!!
 

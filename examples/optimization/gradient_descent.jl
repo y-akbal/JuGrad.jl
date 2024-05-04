@@ -25,7 +25,7 @@ function optimize(f::Function,  ## Approximately takes 8285 steps to hit the loc
 end
 
 begin
-    Random.seed!(0)
+    Random.seed!(1)
     x_init = rand(Float32, 2) 
     optimize(x->f(x), x_init; lr = 0.001f0, max_iter = 10000)
 end

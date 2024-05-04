@@ -13,9 +13,10 @@ using BenchmarkTools
         f_3(x) = sum(x)
         f_4(x) = (1.5 - x[1]+x[1]*x[2])^2 + (2.25 - x[1] +x[1]*x[2]^2)^2 + (2.625 - x[1] +x[1]*x[2]^3)^2
         f_5(x) = JuGrad.log_(prod(x)+1000)
+        f_6(x) = 5/(x[1]^2 + x[2]^2)
 
-        L::Array{Function} = [f_1, f_2, f_3, f_4, f_5]
-        Shapes::Array{Tuple} = [(2,1), (3,1), (10,10), (2,1), (7,7)]
+        L::Array{Function} = [f_1, f_2, f_3, f_4, f_5, f_6]
+        Shapes::Array{Tuple} = [(2,1), (3,1), (10,10), (2,1), (7,7), (2,1)]
         m::Int = 0
 
         for (f, shape) in zip(L, Shapes)

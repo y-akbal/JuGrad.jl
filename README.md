@@ -1,11 +1,11 @@
 # JuGrad.jl
 
 This is an experimental reverse mode autograd stuff motivated by Karpathy's Tiny Grad and is designed for fun. JuGrad is written entirely in Julia. Eventhough it works well, no promise to be fast and furious! It is in Pytorch's style: uses backward! and zero_grad! functions.
-It does take scalar based gradients, therefore can be used to implement simple optimization algorithms. 
+It does take scalar based gradients, therefore can be used to implement simple optimization algorithms. You can stick with single or double precision, all the calculations will be done respectively.  
 
 ````julia
 using JuGrad
-grad(x->x^2, 1) ## Returns val and grads
+grad(x->x^2, 1.0) ## Returns val and grads
 ## or 
 grad(x->x[1]^2+x[2]^2, randn(2))
 ````
@@ -17,8 +17,8 @@ x = t_number(3.f0)
 y = t_number(5.f0)
 z = sin(x^2 + y^2)
 backward!(z)
-x.grad, y.grad
-zero_grad!(z)
+x.grad, y.grad ## Collect the gradients!!! (-5.0914216f0, -8.4857025f0)
+zero_grad!(z) ## Zero the gradients on the graph!!
 ````
 
 Here t_number is a special type that whispers the gradient values (or whatever needed) to do backwardpass to its child t_number. At the moment there is NO ""stop gradient"" and second derivative kind options. zero_grad! function zeros the grads of all the dudes in the computational graph.  
@@ -33,12 +33,12 @@ layer = Linear(10, 1; σ = JuGrad.tanh_)
 X = randn(10, 100)
 y = randn(1, 100)
 
-loss = sum((layer(X) - y).^2)
+loss = mean((layer(X) - y).^2)
 bacward!(loss) #You can now collect the gradients
 JuGrad.nn.step!(optimizer, network) #Update the grads now!!!
 
 ````
-Below you will see some decision boundaries of two binary  classifiers trained entirely using JuGrad on synthetic datasets. See the examples for an end to end application and reproduce the following. To do so, you will need PyCall with sklearn installed. 
+Below you will see some decision boundaries of two binary  classifiers trained entirely using JuGrad on synthetic datasets. Browse the examples directory for end to end applications and reproduce the following. To do so, you will need PyCall with sklearn installed. 
 
 
 <p align="center">

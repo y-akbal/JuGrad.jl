@@ -5,7 +5,7 @@ struct diff_f <: Function
     def::String
 end
 
-function (f::diff_f)(x::T) where T 
+@inline function (f::diff_f)(x::T) where T 
     ## This dude is the forward pass function!!!
     return @fastmath f.f_(x)
 end
@@ -18,8 +18,9 @@ function grad(f::diff_f, x::T)  where T <: tracked_number
     return f.grad(x.w)
 end
 
-function (f::diff_f)(x::T) where T <: tracked_number
+@inline function (f::diff_f)(x::T) where T <: tracked_number
     ## This is for backwards pass
+    map(to_non_terminal!, [x])
     res = t_number(@fastmath f.f_(x.w))
     res.parents_grads[x] = grad(f, x)
     return res

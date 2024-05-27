@@ -52,7 +52,7 @@ There is a class of functions (actually callable objects) with a generic name di
 ## Examples: diff_f
 ````julia
 using JuGrad
-relu_ = diff_f(x->max(x,0), x-> ifelse(x>0, one(x), zero(x)),"Relu")
+relu_ = diff_f(x->max(x,zero(x)), x-> ifelse(x>0, one(x), zero(x)),"Relu")
 ````
 This way you can implement your own activation functions without bothering yourself with "not implemented errors". Here the second function stand for the derivative of the first, responsible for doing backprop. 
 

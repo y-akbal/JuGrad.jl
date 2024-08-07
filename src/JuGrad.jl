@@ -225,7 +225,8 @@ function grad(f::Function, x::T) where T <: Real
     z = f(x_) 
     
     if !isa(z, t_number)
-        return z.w, x_grad
+        ## If the output of the function is constant, then the grad is supposed to be zero!!!
+        return z, x_.grad
     end
     
     backward!(z)

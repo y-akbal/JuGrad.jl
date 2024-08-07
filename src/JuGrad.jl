@@ -39,6 +39,8 @@ function to_non_terminal!(t::t_number)
     t.terminal = false
 end
 
+# TODO: Keep the primitive operation set as little as possible,
+
 @inline function Base.:+(t::t_number, l::t_number)::t_number
     result = t_number(t.w+l.w)
     map(to_non_terminal!, [t, l])
@@ -81,8 +83,6 @@ end
     result.parents_grads[t] = -one(t.w)
     return result
 end
-
-
 
 @inline function Base.:*(t::t_number, l::t_number)::t_number
     result = t_number(t.w*l.w)
@@ -147,7 +147,7 @@ end
 @inline function Base.:abs(t::t_number)::t_number
     result = t_number(abs(t.w))
     map(to_non_terminal!, [t])
-    result.parents_grads[t] = ifelse(t.w >= 0, 1, -1)
+    result.parents_grads[t] = ifelse(t.w >= 0, one(t.w), -one(t.w))
     return result
 end
 
@@ -183,7 +183,7 @@ end
 
 @inline function zero_grad!(t::t_number)
     t.grad = zero(t.grad)
-    ## Something that has been alread zeroes may be zeroed one more time!!!
+    ## Something that has been alread zeroed may be zeroed one more time!!!
     for parents in t.parents_grads |> keys
         zero_grad!(parents)
     end
@@ -197,11 +197,20 @@ end
     end
 
     for parents in l.parents_grads |> keys
-        @fastmath parents.grad += l.parents_grads[parents]*l.grad
+        
+        parents.grad += l.parents_grads[parents]*l.grad
         ## Recursive call 
         backward!(parents)
     end
 
+end
+
+
+@inline function backward!(l::Real)
+    ## This is for the case that the output of your function is constant
+    ## In this case Zygote returns (nothing, )!!!!
+    @warn "Either the output of your function is constant or the computational graph is not connected"
+    return nothing
 end
 
 function grad(f::Function, x::AbstractVecOrMat{T}) where T <: Real
@@ -214,11 +223,17 @@ end
 function grad(f::Function, x::T) where T <: Real
     x_ = x |> t_number
     z = f(x_) 
+    
+    if !isa(z, t_number)
+        return z.w, x_grad
+    end
+    
     backward!(z)
     return z.w, x_.grad
 end
 
 include("diff_functions.jl")
+include("comparison_ops.jl")
 
 module nn
 __precompile__(true)
